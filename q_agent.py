@@ -53,21 +53,29 @@ def nextStep():
     score1 = 0
     score2 = 0
     for aktion in train:
+        print('aktion: ', aktion)
         if aktion != 0:
+            print('erreicht1')
+            print('besteAktion: ', beste_aktion(i,get_possible_actions(i)))
             if aktion == beste_aktion(i,get_possible_actions(i)):
                 score1 -= abs(beste_aktion(i,get_possible_actions(i)) - aktion)
+                print('erreicht2')
         i += 1
     netz = mutationsAlgorithmus(score1)
     i = 0
+    print('for1')
     for aktion in train:
         if aktion != 0:
             if aktion == beste_aktion(i,get_possible_actions(i)):
                 score2 -= abs(beste_aktion(i,get_possible_actions(i)) - aktion)
         i += 1
+        print('for2')
     if score1 >= score2:
         e = netz[0]
+        print('if for2')
     else:
         e = netz[1]
+        print('else for2')
         
 def get_possible_actions(s):
     return actions_in_situation[s]       
@@ -96,6 +104,7 @@ def neugierige_aktion(situation, moegliche_aktionen):
 # ==============================================================
 
 def mutationsAlgorithmus(score):
+    print('mutatalg')
     altesNetz = e
     zufall1 = rd.randint(0,3)
     zufall2 = rd.randint(0,len(e[zufall1])-1)
