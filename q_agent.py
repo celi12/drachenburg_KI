@@ -67,7 +67,6 @@ def nextStep():
         i += 1
     netz = mutationsAlgorithmus(score1)
     i = 0
-    print('C:', c)
     for aktion in train:
         if aktion != 0:
             if aktion != beste_aktion(i,get_possible_actions(i)):
@@ -75,12 +74,16 @@ def nextStep():
         i += 1
     print('1:', score1, ' | 2:',  score2)
     if score1 > score2:
+        global e
         e = netz[0]
+        print('\n \n score1 > score2 \n \n')
+
     elif score1 == score2:
         e = netz[1]
+        
     else:
         e = netz[1]
-        print('netz', netz[1])
+
         
 def get_possible_actions(s):
     return actions_in_situation[s]       
@@ -110,7 +113,9 @@ def neugierige_aktion(situation, moegliche_aktionen):
 
 def mutationsAlgorithmus(score):
     print('mutatalg')
-    altesNetz = copy.deepcopy(e)
+    Liste = []
+    Liste =copy.deepcopy(e)
+    altesNetz = Liste
     zufall1 = rd.randint(0,3)
     zufall2 = rd.randint(0,len(e[zufall1])-1)
     zufall3 = rd.randint(0,len(e[zufall1][zufall2])-1)
@@ -141,6 +146,7 @@ def lerne_dazu(situation,aktion,belohnung,naechste_situation,naechste_moegliche_
     
     
 # ==============================================================
+
 
 def dokumentiere_agent():
     '''
