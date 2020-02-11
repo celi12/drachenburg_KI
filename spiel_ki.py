@@ -1,6 +1,6 @@
 from tkinter import *
 from umwelt import *
-from q_agent import *
+from q_agent2 import *
 import time
 
 the_reward = 0

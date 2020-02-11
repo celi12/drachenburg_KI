@@ -19,6 +19,11 @@ def initialisiere_agent(anzahl_situationen_, anzahl_aktionen_):
     global c
     global d
     global e
+    global f
+    global g
+    global h
+    global i
+    global j
     global train
     global actions_in_situation
     global bias
@@ -30,6 +35,12 @@ def initialisiere_agent(anzahl_situationen_, anzahl_aktionen_):
     c = [[0,0,0],[0,0,0],[0,0,0]]
     d = [[0,0,0]]
     e = [a,b,c,d]
+    g = [[0,0,0],[0,0,0]]
+    h = [[0,0,0],[0,0,0],[0,0,0]]
+    i = [[0,0,0],[0,0,0],[0,0,0]]
+    j = [[0,0,0]]
+    f = [g,h,i,j]
+    
     train = [1,2,5,2,5,0,7,6,6,0,0,0]
     actions_in_situation = [[0,1],\
                         [0,2,3,4],\
@@ -56,6 +67,8 @@ def nextStep():
     i = 0
     score1 = 0
     score2 = 0
+    global e
+    global f
     for aktion in train:
         if aktion != 0:
             if aktion != beste_aktion(i,get_possible_actions(i)):
@@ -70,15 +83,20 @@ def nextStep():
         i += 1
     print('1:', score1, ' | 2:',  score2)
     if score1 > score2:
-        global e
-        e = netz[0]
+        a = g
+        b = h
+        c = i
+        d = j
         print('\n \n VeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderungVeränderung \n \n')
-
+        print(e)
+        print(f)
     elif score1 == score2:
-        e = netz[1]
+        f = e
         
     else:
-        e = netz[1]
+        f = e
+
+    
 
         
 def get_possible_actions(s):
@@ -108,10 +126,7 @@ def neugierige_aktion(situation, moegliche_aktionen):
 # ==============================================================
 
 def mutationsAlgorithmus(score):
-    print('mutatalg')
-    Liste = []
-    Liste =copy.deepcopy(e)
-    altesNetz = Liste
+    altesNetz = f
     zufall1 = rd.randint(0,3)
     zufall2 = rd.randint(0,len(e[zufall1])-1)
     zufall3 = rd.randint(0,len(e[zufall1][zufall2])-1)
