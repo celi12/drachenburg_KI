@@ -1,4 +1,5 @@
 import random as rd
+import copy
 anzahl_situationen = 0
 anzahl_aktionen = 0
 
@@ -20,8 +21,11 @@ def initialisiere_agent(anzahl_situationen_, anzahl_aktionen_):
     global e
     global train
     global actions_in_situation
+    global bias
 
-    a = [[0,0,0]]
+
+    bias = 1
+    a = [[0,0,0],[0,0,0]]
     b = [[0,0,0],[0,0,0],[0,0,0]]
     c = [[0,0,0],[0,0,0],[0,0,0]]
     d = [[0,0,0]]
@@ -55,34 +59,35 @@ def nextStep():
     for aktion in train:
         print('aktion: ', aktion)
         if aktion != 0:
-            print('erreicht1')
+            print('i: ', i)
+            print('get_possible_actions:', get_possible_actions(i))
             print('besteAktion: ', beste_aktion(i,get_possible_actions(i)))
-            if aktion == beste_aktion(i,get_possible_actions(i)):
+            if aktion != beste_aktion(i,get_possible_actions(i)):
                 score1 -= abs(beste_aktion(i,get_possible_actions(i)) - aktion)
-                print('erreicht2')
         i += 1
     netz = mutationsAlgorithmus(score1)
     i = 0
-    print('for1')
+    print('C:', c)
     for aktion in train:
         if aktion != 0:
-            if aktion == beste_aktion(i,get_possible_actions(i)):
+            if aktion != beste_aktion(i,get_possible_actions(i)):
                 score2 -= abs(beste_aktion(i,get_possible_actions(i)) - aktion)
         i += 1
-        print('for2')
-    if score1 >= score2:
+    print('1:', score1, ' | 2:',  score2)
+    if score1 > score2:
         e = netz[0]
-        print('if for2')
+    elif score1 == score2:
+        e = netz[1]
     else:
         e = netz[1]
-        print('else for2')
+        print('netz', netz[1])
         
 def get_possible_actions(s):
     return actions_in_situation[s]       
 # ==============================================================        
         
 def beste_aktion(sit, akt):
-    [a1,a2,a3] = [sit*a[0][0], sit*a[0][1], sit*a[0][2]]
+    [a1,a2,a3] = [sit*a[0][0]+ bias*a[1][0], sit*a[0][1]+ bias*a[1][1], sit*a[0][2]+ bias*a[1][2]]
     [b1,b2,b3] = [a1*b[0][0]+ a2*b[1][0]+ a3*b[2][0],a1*b[0][1]+ a2*b[1][1]+ a3*b[2][1],a1*b[0][2]+ a2*b[1][2]+ a3*b[2][2]]
     [c1,c2,c3] = [b1*c[0][0]+ b2*c[1][0]+ b3*c[2][0],b1*c[0][1]+ b2*c[1][1]+ b3*c[2][1],b1*c[0][2]+ b2*c[1][2]+ b3*c[2][2]]
     ergebnis = int(c1*d[0][0] +  c2*d[0][1] + c3*d[0][2])
@@ -105,12 +110,18 @@ def neugierige_aktion(situation, moegliche_aktionen):
 
 def mutationsAlgorithmus(score):
     print('mutatalg')
-    altesNetz = e
+    altesNetz = copy.deepcopy(e)
     zufall1 = rd.randint(0,3)
     zufall2 = rd.randint(0,len(e[zufall1])-1)
     zufall3 = rd.randint(0,len(e[zufall1][zufall2])-1)
-    e[zufall1][zufall2][zufall3] += (rd.random()-0.5)*abs(score)/20
+    if score != 0:
+        e[zufall1][zufall2][zufall3] += (rd.random()-0.5)*abs(score)/20
+    else:
+        e[zufall1][zufall2][zufall3] += rd.random()-0.5
+            
     neuesNetz = e
+    if altesNetz == neuesNetz:
+        print('wtf')
     return [altesNetz, neuesNetz]
     
     
